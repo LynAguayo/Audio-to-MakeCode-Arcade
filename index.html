@@ -78,17 +78,27 @@ let pyodideReadyPromise = loadPyodide({indexURL: "https://cdn.jsdelivr.net/pyodi
 const dropArea = document.getElementById('drop-area');
 const output = document.getElementById('output');
 
+// Prevent default drag/drop behavior anywhere on the page
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => e.preventDefault());
+
+// Drag-over effect for drop area
 dropArea.addEventListener('dragover', e => {
     e.preventDefault();
     dropArea.classList.add('dragover');
 });
 dropArea.addEventListener('dragleave', e => {
+    e.preventDefault();
     dropArea.classList.remove('dragover');
 });
+
+// Drop event
 dropArea.addEventListener('drop', e => {
     e.preventDefault();
     dropArea.classList.remove('dragover');
-    handleFile(e.dataTransfer.files[0]);
+    if (e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+    }
 });
 
 async function handleFile(file) {
